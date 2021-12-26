@@ -1,0 +1,44 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from time import sleep 
+from datetime import date
+from glob import glob
+import shutil
+
+url = 'url'
+user = 'usuario'
+pswd = 'senha'
+
+navegador = webdriver.Chrome()
+navegador.get(url)
+assert 'Titulo' in navegador.title
+
+navegador.find_element(By.NAME, 'name').send_keys(user) 
+navegador.find_element(By.XPATH, 'xpath').send_keys(pswd)
+navegador.find_element(By.XPATH, 'xpath').click()
+sleep(3)
+
+url = 'url'
+navegador.get(url)
+assert 'Titulo' in navegador.title
+sleep (3)
+
+data_inicial = 'dd/mm/aaaa'
+data_final = 'dd/mm/aaaa'
+
+navegador.find_elements(By.TAG_NAME, "tag name")[1].send_keys(data_inicial)
+sleep (1)
+navegador.find_elements(By.TAG_NAME, "tag name")[2].send_keys(data_final)
+sleep (1)
+navegador.find_elements(By.TAG_NAME, "tag name")[26].click()
+
+hoje = date.today()
+dia = hoje.strftime("%d-%m-%Y") #dd/mm/YY
+download = f"Relatorio_{dia}"
+
+while True:
+	sleep(5)
+	arquivo = glob(f"C:\\Users\\Usuario\\Downloads\\{download}*")
+	if arquivo:
+		shutil.move(arquivo[0], f"C:\\Users\\Usuario\\Desktop\\Relatorio.xls")
+		break
