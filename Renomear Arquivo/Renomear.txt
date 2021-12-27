@@ -1,4 +1,4 @@
-from PyPDF2 import PdfFileReader
+from PyPDF2 import PdfFileReader, PdfFileWriter
 import os
 
 files = os.listdir("C:\\Users\\Usuario\\Documents\\arquivo")
@@ -7,10 +7,34 @@ for file in files:
 	pdf = open(f"C:\\Users\\Usuario\\Documents\\arquivo\\{file}", 'rb')
 	read = PdfFileReader(pdf)
 	num_pages = read.getNumPages()
-	page = read.getPage(0)
-	conteudo = page.extractText().split()
-	num = conteudo.index("conteudo", index)
-	num_serie = num+2
-	titulo = ' '.join(conteudo[num:num_serie])
-	pdf.close()
-	os.rename(rf'C:\\Users\\Usuario\\Documents\\{file}',rf'C:\\Users\\Usuario\\Desktop\\{titulo}.pdf')
+	if num_pages == 1:
+		page = read.getPage(0)
+		conteudo = page.extractText().split()
+		num = conteudo.index("conteudo", index)
+		num_serie = num+2
+		nome = ' '.join(conteudo[num:num_serie])
+		titulo = ''.join(e for e in nome if e.isalnum())
+		pdfWriter = PdfFileWriter()
+		pdfWriter.addPage(read.getPage(0))
+		
+		with open(f'C:\\Users\\Usuario\\Desktop\\{titulo}.pdf', 'wb') as f:
+			pdfWriter.write(f)
+			f.close()
+	else:
+		for page_num in range(read.numPages):
+			page = read.getPage(page_num)
+			conteudo = page.extractText().split()
+			num = conteudo.index("conteudo", index)
+			num_serie = num+2
+			nome = ' '.join(conteudo[num:num_serie])
+			titulo = ''.join(e for e in nome if e.isalnum())
+			pdfWriter = PdfFileWriter()
+			pdfWriter.addPage(read.getPage(page_num))
+		
+			with open(f'C:\\Users\\Usuario\\Desktop\\{titulo}.pdf', 'wb') as f:
+				pdfWriter.write(f)
+				f.close()
+	
+	
+	
+	
