@@ -1,0 +1,16 @@
+from PyPDF2 import PdfFileReader
+import os
+
+files = os.listdir("C:\\Users\\Usuario\\Documents\\arquivo")
+
+for file in files:
+	pdf = open(f"C:\\Users\\Usuario\\Documents\\arquivo\\{file}", 'rb')
+	read = PdfFileReader(pdf)
+	num_pages = read.getNumPages()
+	page = read.getPage(0)
+	conteudo = page.extractText().split()
+	num = conteudo.index("conteudo", index)
+	num_serie = num+2
+	titulo = ' '.join(conteudo[num:num_serie])
+	pdf.close()
+	os.rename(rf'C:\\Users\\Usuario\\Documents\\{file}',rf'C:\\Users\\Usuario\\Desktop\\{titulo}.pdf')
