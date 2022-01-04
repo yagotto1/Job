@@ -1,39 +1,99 @@
 from PyPDF2 import PdfFileReader, PdfFileWriter
-import os
+import os 
+from tkinter import *
+from tkinter import filedialog, messagebox
+import tkinter as tk
 
-files = os.listdir("C:\\Users\\Usuario\\Documents\\arquivo")
 
-for file in files:
-	pdf = open(f"C:\\Users\\Usuario\\Documents\\arquivo\\{file}", 'rb')
-	read = PdfFileReader(pdf)
-	num_pages = read.getNumPages()
-	if num_pages == 1:
-		page = read.getPage(0)
-		conteudo = page.extractText().split()
-		num = conteudo.index("conteudo", index)
-		num_serie = num+2
-		nome = ' '.join(conteudo[num:num_serie])
-		titulo = ''.join(e for e in nome if e.isalnum())
-		pdfWriter = PdfFileWriter()
-		pdfWriter.addPage(read.getPage(0))
-		
-		with open(f'C:\\Users\\Usuario\\Desktop\\{titulo}.pdf', 'wb') as f:
-			pdfWriter.write(f)
-			f.close()
+def selecionar_pasta():
+	path.delete(0, tk.END)
+	folder = filedialog.askdirectory()
+	path.insert(0, folder)
+
+def rename_PDF_Unilever():
+	folder = path.get()
+	files = os.listdir(rf'{folder}')
+	if ".pdf" not in str(files):
+		messagebox.showwarning(title='Local inválido', message='Selecione uma pasta válida!')
+		path.delete(0, END)
+
 	else:
-		for page_num in range(read.numPages):
-			page = read.getPage(page_num)
-			conteudo = page.extractText().split()
-			num = conteudo.index("conteudo", index)
-			num_serie = num+2
-			nome = ' '.join(conteudo[num:num_serie])
-			titulo = ''.join(e for e in nome if e.isalnum())
-			pdfWriter = PdfFileWriter()
-			pdfWriter.addPage(read.getPage(page_num))
-		
-			with open(f'C:\\Users\\Usuario\\Desktop\\{titulo}.pdf', 'wb') as f:
-				pdfWriter.write(f)
-				f.close()
+		for file in files:
+			pdf = open(rf"{folder}\\{file}", 'rb')
+			read = PdfFileReader(pdf)
+			num_pages = read.getNumPages()
+			if num_pages == 1:
+				page = read.getPage(0)
+				conteudo = page.extractText().split()
+				nfe = conteudo.index("X", index)
+				nfe_serie = nfe+2
+				nome = ' '.join(conteudo[nfe:nfe_serie])
+				titulo = ''.join(e for e in nome if e.isalnum())
+				pdfWriter = PdfFileWriter()
+				pdfWriter.addPage(read.getPage(0))
+				with open(f'C:\\Users\\User\\Desktop\\{titulo}.pdf', 'wb') as f:
+					pdfWriter.write(f)
+					f.close()
+
+			else:
+				for page_num in range(read.numPages):
+					page = read.getPage(page_num)
+					conteudo = page.extractText()
+					if "X" in conteudo:
+						split = conteudo.split()
+						index = [string for string in split if "X" in string]
+						index1 = ''.join(index)
+						nfe = split.index(index1)
+						nfe_serie = nfe-1
+						nfe_num = ' '.join(split[nfe_serie:nfe])
+						nome = ''.join(e for e in nfe_num if e.isalnum())
+						titulo = nome.lstrip('0')
+						pdfWriter = PdfFileWriter()
+						pdfWriter.addPage(read.getPage(page_num))
+
+					elif "X" in conteudo:
+						split = conteudo.split()
+						index = [string for string in split if "X" in string]
+						index1 = ''.join(index)
+						nfe = split.index(index1)
+						nfe_serie = nfe-1
+						nfe_num = ' '.join(split[nfe_serie:nfe])
+						nome = ''.join(e for e in nfe_num if e.isalnum())
+						titulo = nome.lstrip('0')
+						pdfWriter = PdfFileWriter()
+						pdfWriter.addPage(read.getPage(page_num))
+
+					else:
+						titulo = f"renomear-{page_num}_{file}"
+						pdfWriter = PdfFileWriter()
+						pdfWriter.addPage(read.getPage(page_num))
+						
+					with open(f'C:\\Users\\User\\{titulo}.pdf', 'wb') as f:
+						pdfWriter.write(f)
+						f.close()
+
+	messagebox.showinfo(title='', message='Sucesso!')
+	if "ok":
+		quit()
+
+
+janela = tk.Tk()
+janela.title("Programa")
+janela.iconbitmap("Icone.ico")
+
+texto = Label(janela, text="Selecione a pasta para executar o programa:")
+texto.grid(column=0, row=0, padx=60, pady=10)
+
+path = Entry(janela, width=55)
+path.grid(column=0, row=1)
+
+botao = Button(janela, text="Procurar...", command=selecionar_pasta)
+botao.grid(column=1, row=1, padx=5)
+
+botao = Button(janela, text="Executar", command=rename_PDF_Unilever)
+botao.grid(column=0, row=2, padx=10, pady=10)
+
+janela.mainloop()
 	
 	
 	
