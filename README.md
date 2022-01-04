@@ -1,2 +1,2 @@
 # Job
- Projetos aplicados ao meu trabalho.
+ Projetos com aplicação prática.
